@@ -11,68 +11,41 @@ import {
     ReactiveFormsModule,
     Validators,
 } from '@angular/forms';
-import { InputSendLoginFormDto } from '@domain/usecases/shared/authenticate/InputSendLoginFormDto/InputSendLoginFormDto';
-import { OutputSendLoginFormDto } from '@domain/usecases/shared/authenticate/OutputSendLoginFormDto/OutputSendLoginFormDto';
-import { AuthService } from '@infra/services';
-import { ButtonComponent, FormComponent } from '@presentation/view/components';
+import { InputSendLoginFormDto, OutputSendLoginFormDto } from '@domain/dtos';
+import { loginFields } from '@domain/static/data';
+import { AuthenticateUseCase } from '@domain/usecases';
+import {
+    ButtonComponent,
+    FormComponent,
+    FooterComponent,
+} from '@presentation/view/components';
 import { FormInputComponent } from '@presentation/view/components/form';
-import { FooterComponent } from "../../../components/footer/footer.component";
+import { TokenService } from 'src/app/security';
 
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
     imports: [
-    FormComponent,
-    FormInputComponent,
-    ReactiveFormsModule,
-    CommonModule,
-    ButtonComponent,
-    FooterComponent
-],
+        FormComponent,
+        FormInputComponent,
+        ReactiveFormsModule,
+        CommonModule,
+        ButtonComponent,
+        FooterComponent,
+    ],
     standalone: true,
 })
 export class LoginComponent implements OnInit {
     form: FormGroup = new FormGroup({});
-
+    loginFields = loginFields;
     constructor(
         private _formBuilder: FormBuilder,
-        private _authService: AuthService,
+        private _authService: AuthenticateUseCase,
+        private _tokenService: TokenService
     ) {}
-    config = {
-        fields: [
-            {
-                component: 'input',
-                name: 'email',
-                type: 'email',
-                label: 'Email',
-                value: '',
-                placeholder: 'Digite seu email',
-                validations: [
-                    {
-                        name: 'required',
-                        message: 'Email é obrigatório',
-                    },
-                ],
-            },
-            {
-                component: 'input',
-                name: 'password',
-                type: 'password',
-                value: '',
-                label: 'Senha: *',
-                placeholder: 'Digite sua senha',
-                validations: [
-                    {
-                        name: 'required',
-                        message: 'Senha obrigatória',
-                    },
-                ],
-            },
-        ],
-    };
     ngOnInit(): void {
         this.form = this._formBuilder.group({});
-        this.config.fields.forEach((field) => {
+        this.loginFields.fields.forEach((field) => {
             const control = this._formBuilder.control(
                 field.value || '',
                 this._bindValidations(field.validations || []),
@@ -112,13 +85,21 @@ export class LoginComponent implements OnInit {
         this._authService.sendCredentials(data).subscribe((response) => {
             const output: OutputSendLoginFormDto = {
                 statusCode: response.statusCode,
-                message: response.message,
+                token: response.token,
             };
+            if (output.token) {
+                this._tokenService.setToken(output.token);
+            }
             this.handleResponse(output);
         });
     }
 
     handleResponse(output: OutputSendLoginFormDto): void {
-        console.log(output);
+        if (output.statusCode === 200) {
+            document.cookie = `token=${output.token}; expires=${new Date().getDate() + 1}`;
+            window.location.href = '/admin';
+        } else {
+            alert('Usuário ou senha inválidos');
+        }
     }
 }

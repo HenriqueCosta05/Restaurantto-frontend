@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/unbound-method */
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
     FormBuilder,
     FormGroup,
-    Validators,
     ReactiveFormsModule,
+    Validators,
 } from '@angular/forms';
 import { Validation } from '@domain/base';
-import { FormConfig } from '@domain/interfaces';
-import { CommonModule } from '@angular/common';
+import { FormConfig } from '@domain/static/interfaces';
 
 @Component({
     selector: 'app-form',
@@ -22,6 +22,9 @@ import { CommonModule } from '@angular/common';
 export class FormComponent implements OnInit {
     @Input() config: FormConfig = { fields: [] };
     @Input() class: string = '';
+    @Input() formGroup!: FormGroup;
+    @Input() formControlName: string | undefined;
+    @Output() onSubmit = new EventEmitter<void>();
     @Output() submitForm = new EventEmitter<any>();
 
     form: FormGroup = this._formBuilder.group({});

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TableConfig } from '@domain/interfaces';
+import { TableConfig } from '@domain/static/interfaces';
 import {
     ButtonComponent,
     SidebarComponent,
@@ -112,10 +112,14 @@ export class DashIngredientesComponent {
         search: {
             placeholder: 'Buscar por ingrediente',
             value: '',
+            onSearch: (value: string) => {
+                console.log(value);
+            },
         },
         pagination: {
             pageRange: 10,
             totalItems: 8,
         },
     };
+   
 }

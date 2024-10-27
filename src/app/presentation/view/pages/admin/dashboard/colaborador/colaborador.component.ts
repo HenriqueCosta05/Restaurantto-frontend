@@ -1,5 +1,6 @@
+import { Location } from '@angular/common';
 import { Component } from '@angular/core';
-import { TableConfig } from '@domain/interfaces';
+import { TableConfig } from '@domain/static/interfaces';
 import {
     ButtonComponent,
     SidebarComponent,
@@ -14,7 +15,7 @@ import {
     styles: ``,
 })
 export class ColaboradorComponent {
-    constructor() {}
+    constructor(private location: Location) {}
 
     tabela: TableConfig<{
         role: string;
@@ -75,8 +76,11 @@ export class ColaboradorComponent {
             },
         ],
         search: {
-            placeholder: 'Search by name or role',
+            placeholder: 'Procure por nome ou função...',
             value: '',
+            onSearch: (value: string) => {
+                console.log(value);
+            },
         },
         pagination: {
             pageRange: 4,
@@ -87,4 +91,7 @@ export class ColaboradorComponent {
         // Lógica para abrir o formulário de cadastro ou navegar para a página de cadastro
         console.log('Abrir formulário de cadastro');
     }
+    voltar() {
+        this.location.back();
+      }
 }
