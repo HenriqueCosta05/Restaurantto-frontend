@@ -25,6 +25,9 @@
           "builder": "@angular-devkit/build-angular:browser-esbuild",
           "options": {
             "outputPath": "dist/restaurantto-app",
+            "allowedCommonJsDependencies": [
+                "lodash"
+            ],
             "index": "src/index.html",
             "aot": true,
             "main": "src/main.ts",
