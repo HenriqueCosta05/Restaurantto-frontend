@@ -1,4 +1,4 @@
-export interface RegisterColaborattorDto {
+export interface CollaboratorDto {
     email: string;
     fullName: string;
     phone: string;
@@ -13,12 +13,11 @@ export interface RegisterColaborattorDto {
     message: string;
     enterprise: string;
     password: string;
-    role: string;
+    roles: string;
     isProspecting: boolean;
     isEmployee: boolean;
 }
 
-export interface RegisterColaborattorResponseDto {
-    statusCode: number;
+export interface CollaboratorResponseDto{
     message?: string;
 }

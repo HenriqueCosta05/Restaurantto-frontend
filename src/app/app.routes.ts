@@ -3,9 +3,11 @@ import {
     CadastroColaboradorComponent,
     CashFlowComponent,
     ColaboradorComponent,
+    ControleMesasComponent,
     DashboardComponent,
     DashFornecedoresComponent,
     DashIngredientesComponent,
+    DeliveryComponent,
     FichasTecnicasComponent,
     FinancasComponent,
     FormFichaComponent,
@@ -15,19 +17,20 @@ import {
     HomepageComponent,
     IngredientesComponent,
     LoginComponent,
+    NotAuthorizedComponent,
     NotFoundComponent,
     NovaFinancaComponent,
     NovoGrupoComponent,
     OrdersComponent,
     PainelContadorComponent,
+    QuestionsComponent,
     StockControlComponent,
     UltimasTransacoesComponent,
-    NotAuthorizedComponent,
-    ControleMesasComponent,
-    DeliveryComponent,
     UltimosPedidosComponent,
 } from '@presentation/view/pages';
 
+import { ForgotPasswordComponent } from '@presentation/view/pages/shared/login/forgot-password/forgot-password.component';
+import { SatisfactionComponent } from '@presentation/view/pages/shared/satisfaction/satisfaction.component';
 import { SecurityGuard } from './security';
 
 export const routes: Routes = [
@@ -37,6 +40,19 @@ export const routes: Routes = [
         path: 'admin',
         component: DashboardComponent,
         canActivate: [SecurityGuard],
+    },
+    {
+        path: 'forgot-password',
+        component: ForgotPasswordComponent,
+        
+    },
+    {
+        path: 'admin/satisfaction',
+        component: SatisfactionComponent,
+    },
+    {
+        path: 'admin/questions',
+        component: QuestionsComponent,
     },
 
     {
